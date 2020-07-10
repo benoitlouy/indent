@@ -1,5 +1,7 @@
 package indent
 
+import scala.language.postfixOps
+
 sealed trait Element
 
 final case class Line(str: String) extends Element
@@ -28,16 +30,40 @@ final class Indent private (val content: Vector[Element]) extends AnyVal {
   def <<(o: Indent): Indent = add(o.content)
 
   def >|(line: String) = add(AddIndent).add(line)
+  def >>|(line: String) = add(AddIndent) >| line
+  def >>>|(line: String) = add(AddIndent) >>| line
+  def >>>>|(line: String) = add(AddIndent) >>>| line
+  def >>>>>|(line: String) = add(AddIndent) >>>>| line
 
   def >|(o: Indent) = add(AddIndent).add(o.content)
+  def >>|(o: Indent) = add(AddIndent) >| o
+  def >>>|(o: Indent) = add(AddIndent) >>| o
+  def >>>>|(o: Indent) = add(AddIndent) >>>| o
+  def >>>>>|(o: Indent) = add(AddIndent) >>>>| o
 
   def >| = add(AddIndent)
+  def >>| = add(AddIndent) >|
+  def >>>| = add(AddIndent) >>|
+  def >>>>| = add(AddIndent) >>>|
+  def >>>>>| = add(AddIndent) >>>>|
 
   def <|(line: String) = add(RemoveIndent).add(line)
+  def <<|(line: String) = add(RemoveIndent) <| line
+  def <<<|(line: String) = add(RemoveIndent) <<| line
+  def <<<<|(line: String) = add(RemoveIndent) <<<| line
+  def <<<<<|(line: String) = add(RemoveIndent) <<<<| line
 
   def <|(o: Indent) = add(RemoveIndent).add(o.content)
+  def <<|(o: Indent) = add(RemoveIndent) <| o
+  def <<<|(o: Indent) = add(RemoveIndent) <<| o
+  def <<<<|(o: Indent) = add(RemoveIndent) <<<| o
+  def <<<<<|(o: Indent) = add(RemoveIndent) <<<<| o
 
   def <| = add(RemoveIndent)
+  def <<| = add(RemoveIndent) <|
+  def <<<| = add(RemoveIndent) <<|
+  def <<<<| = add(RemoveIndent) <<<|
+  def <<<<<| = add(RemoveIndent) <<<<|
 
   def format(indent: String): String =
     content

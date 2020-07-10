@@ -91,10 +91,20 @@ class IndentSpec extends AnyFreeSpecLike {
   }
 
   "toString" in {
-    val data = (Indent.start << "Header" >| "1. Section" >| "a. Subsection" <|) <| "2. Section"
+    val data = Indent.start << "Header" >| "1. Section" >| "a. Subsection" <<| "2. Section"
 
-    println(data)
     assert(data.toString == data.format("•"))
   }
 
+  "syntax" in {
+    import indent.syntax._
+
+    val a = "Headers" >>>>>| "1. Section"
+
+    val expected =
+      """Headers
+        |          1. Section""".stripMargin
+
+    assert(a.format("  ") == expected)
+  }
 }
