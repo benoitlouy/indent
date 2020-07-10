@@ -74,3 +74,10 @@ ThisBuild / releaseProcess := Seq[ReleaseStep](
   releaseStepCommand("sonatypeReleaseAll"),
   pushChanges
 )
+
+addCommandAlias("fix", ";compile:scalafix ;test:scalafix")
+addCommandAlias("cov", ";clean;coverage;+test;coverageReport")
+addCommandAlias("fmt", ";scalafmtAll;scalafmtSbt")
+addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")
+addCommandAlias("fmtCheck", ";scalafmtCheckAll;scalafmtSbtCheck")
+addCommandAlias("check", ";cov;fixCheck;fmtCheck")
