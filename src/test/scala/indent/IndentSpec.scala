@@ -31,8 +31,9 @@ class IndentSpec extends AnyFreeSpecLike {
   "combine Indents" in {
     val prelude = Indent.start << "object Inner {"
 
+    val content1 = Indent.start << "val i: Int = 42"
     val content = Indent.start <<
-      "val i: Int = 42" <<
+      content1 <<
       """val s: String = "foo"""" <<
       "def f(a: Int, b: Int): Int =" >|
       "a + b" <|
@@ -89,17 +90,11 @@ class IndentSpec extends AnyFreeSpecLike {
 
   }
 
-  "test" in {
-    val sectionContent = Indent.start <<
-      "Lorem ipsum" <<
-      "Indented list" >|
-      "- item 1" <<
-      "- item 2" <|
+  "toString" in {
+    val data = (Indent.start << "Header" >| "1. Section" >| "a. Subsection" <|) <| "2. Section"
 
-    val prelude = Indent.start << "Header" << "1. First Section" >| sectionContent <| "2. Second Section" >| sectionContent <|
-
-    prelude.format("  ")
-
+    println(data)
+    assert(data.toString == data.format("•"))
   }
 
 }
