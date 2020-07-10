@@ -1,20 +1,21 @@
 import Dependencies._
+import ReleaseTransformations._
 
+lazy val scala211 = "2.11.12"
 lazy val scala212 = "2.12.10"
 lazy val scala213 = "2.13.2"
 
-lazy val supportedScalaVersions = List(scala213, scala212)
+lazy val supportedScalaVersions = List(scala213, scala212, scala211)
 
-ThisBuild / scalaVersion := scala212
-ThisBuild / version := "0.1.0-SNAPSHOT"
-ThisBuild / organization := "io.github.benoitlouy"
+ThisBuild / scalaVersion := scala213
+ThisBuild / organization := "com.github.benoitlouy"
+ThisBuild / organizationName := "benoitlouy"
 ThisBuild / semanticdbEnabled := true
-ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.3.1-RC3"
+ThisBuild / scalafixDependencies += organizeImports
 
 inThisBuild(
   List(
-    addCompilerPlugin(("org.scalameta" % "semanticdb-scalac" % "4.3.18").cross(CrossVersion.full)),
-    addCompilerPlugin(("org.typelevel" %% "kind-projector" % "0.11.0").cross(CrossVersion.full))
+    addCompilerPlugin(semanticdbScalac.cross(CrossVersion.full))
   )
 )
 
@@ -25,4 +26,51 @@ lazy val root = (project in file("."))
     libraryDependencies += scalaTest % Test
   )
 
-// See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for instructions on how to publish to Sonatype.
+ThisBuild / scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/benoitlouy/indent"),
+    "scm:git@github.com:benoitlouy/indent.git"
+  )
+)
+ThisBuild / developers := List(
+  Developer(
+    id = "benoitlouy",
+    name = "Benoit Louy",
+    email = "benoit.louy@fastmail.com",
+    url = url("https://github.com/benoitlouy")
+  )
+)
+
+ThisBuild / description := "Build multiline string with indentation"
+ThisBuild / licenses := List("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt"))
+ThisBuild / homepage := Some(url("https://github.com/benoitlouy/indent"))
+
+// Remove all additional repository other than Maven Central from POM
+ThisBuild / pomIncludeRepository := { _ => false }
+ThisBuild / publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value) Some("snapshots".at(nexus + "content/repositories/snapshots"))
+  else Some("releases".at(nexus + "service/local/staging/deploy/maven2"))
+}
+ThisBuild / publishMavenStyle := true
+ThisBuild / Test / publishArtifact := false
+
+ThisBuild / releaseTagName := s"${version.value}"
+ThisBuild / releaseVcsSign := true
+ThisBuild / releasePublishArtifactsAction := PgpKeys.publishSigned.value
+ThisBuild / releaseCrossBuild := true
+
+ThisBuild / releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  releaseStepCommandAndRemaining("+publishSigned"),
+  setNextVersion,
+  commitNextVersion,
+  releaseStepCommand("sonatypeReleaseAll"),
+  pushChanges
+)
