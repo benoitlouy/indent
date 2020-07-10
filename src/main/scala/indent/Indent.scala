@@ -33,11 +33,11 @@ final class Indent private (val content: Vector[Element]) extends AnyVal {
 
   def >| = add(AddIndent)
 
-  def |<(line: String) = add(RemoveIndent).add(line)
+  def <|(line: String) = add(RemoveIndent).add(line)
 
-  def |<(o: Indent) = add(RemoveIndent).add(o.content)
+  def <|(o: Indent) = add(RemoveIndent).add(o.content)
 
-  def |< = add(RemoveIndent)
+  def <| = add(RemoveIndent)
 
   def format(indent: String): String =
     content
@@ -50,6 +50,9 @@ final class Indent private (val content: Vector[Element]) extends AnyVal {
         case ((count, acc), RemoveIndent) => (if (count == 0) 0 else count - 1, acc)
       }
       ._2
+
+  override def toString: String = format("•")
+
 }
 
 object Indent {

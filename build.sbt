@@ -26,6 +26,15 @@ lazy val root = (project in file("."))
     libraryDependencies += scalaTest % Test
   )
 
+lazy val docs = (project in file("indent-docs"))
+  .settings(
+    mdocVariables := Map(
+      "VERSION" -> version.value
+    )
+  )
+  .dependsOn(root)
+  .enablePlugins(MdocPlugin)
+
 ThisBuild / scmInfo := Some(
   ScmInfo(
     url("https://github.com/benoitlouy/indent"),

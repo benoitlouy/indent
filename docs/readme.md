@@ -5,11 +5,11 @@
 
 To include indent in your project
 
-```scalac
-libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.1.0-SNAPSHOT"
+```scala
+libraryDependencies += "com.github.benoitlouy" %% "indent" % "@VERSION@"
 ```
 
-```scala
+```scala mdoc
 import scala.language.postfixOps
 import indent._
 
@@ -18,35 +18,9 @@ val sectionContent = Indent.start <<
   "Indented list" >|
   "- item 1" <<
   "- item 2" <|
-// sectionContent: Indent = Lorem ipsum
-// Indented list
-// •- item 1
-// •- item 2
 
 // combining indent instances
 val prelude = Indent.start << "Header" << "1. First Section" >| sectionContent <| "2. Second Section" >| sectionContent <|
-// prelude: Indent = Header
-// 1. First Section
-// •Lorem ipsum
-// •Indented list
-// ••- item 1
-// ••- item 2
-// 2. Second Section
-// •Lorem ipsum
-// •Indented list
-// ••- item 1
-// ••- item 2
 
 println(prelude.format("  "))
-// Header
-// 1. First Section
-//   Lorem ipsum
-//   Indented list
-//     - item 1
-//     - item 2
-// 2. Second Section
-//   Lorem ipsum
-//   Indented list
-//     - item 1
-//     - item 2
 ```

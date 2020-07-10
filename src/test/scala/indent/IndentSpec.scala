@@ -18,7 +18,7 @@ class IndentSpec extends AnyFreeSpecLike {
   }
 
   "format text using operators" in {
-    val res = Indent.start << "foo" >| "bar" << "baz" |< "end"
+    val res = Indent.start << "foo" >| "bar" << "baz" <| "end"
 
     val expected =
       """foo
@@ -35,11 +35,11 @@ class IndentSpec extends AnyFreeSpecLike {
       "val i: Int = 42" <<
       """val s: String = "foo"""" <<
       "def f(a: Int, b: Int): Int =" >|
-      "a + b" |<
+      "a + b" <|
 
-    val inner = prelude >| content |< "}"
+    val inner = prelude >| content <| "}"
 
-    val wrapper = Indent.start << "object Wrapper {" >| inner |< "}"
+    val wrapper = Indent.start << "object Wrapper {" >| inner <| "}"
 
     val expected =
       """object Wrapper {
@@ -60,7 +60,7 @@ class IndentSpec extends AnyFreeSpecLike {
       "val i: Int = 42" <<
       """val s: String = "foo"""" <<
       "def f(a: Int, b: Int): Int =" >|
-      "a + b" |<
+      "a + b" <|
 
     val raw =
       """val d: Double = 3.14
@@ -68,9 +68,9 @@ class IndentSpec extends AnyFreeSpecLike {
         |val f: Float = 6.28
         |val arr: Array[String] = Array("foo", "bar")""".stripMargin
 
-    val inner = prelude >| content << raw |< "}"
+    val inner = prelude >| content << raw <| "}"
 
-    val wrapper = Indent.start << "object Wrapper {" >| inner |< "}"
+    val wrapper = Indent.start << "object Wrapper {" >| inner <| "}"
 
     val expected =
       """object Wrapper {
@@ -86,6 +86,19 @@ class IndentSpec extends AnyFreeSpecLike {
         |  }
         |}""".stripMargin
     assert(wrapper.format("  ") == expected)
+
+  }
+
+  "test" in {
+    val sectionContent = Indent.start <<
+      "Lorem ipsum" <<
+      "Indented list" >|
+      "- item 1" <<
+      "- item 2" <|
+
+    val prelude = Indent.start << "Header" << "1. First Section" >| sectionContent <| "2. Second Section" >| sectionContent <|
+
+    prelude.format("  ")
 
   }
 
