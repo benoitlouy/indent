@@ -78,6 +78,7 @@ releaseProcess := Seq[ReleaseStep](
   runTest,
   setReleaseVersion,
   commitReleaseVersion,
+  releaseStepInputTask(mdoc),
   tagRelease,
   releaseStepCommandAndRemaining("+publishSigned"),
   setNextVersion,
