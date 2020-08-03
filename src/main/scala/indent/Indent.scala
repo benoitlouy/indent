@@ -1,86 +1,35 @@
 package indent
 
-import scala.language.postfixOps
+sealed trait Element extends Product with Serializable
 
-sealed trait Element
+object Element {
 
-final case class Line(str: String) extends Element
-final case object EmptyLine extends Element
-final case object AddIndent extends Element
-final case object RemoveIndent extends Element
-
-final class Indent private (val content: Vector[Element]) extends AnyVal {
-  def add(element: Element): Indent = new Indent(content :+ element)
-
-  def add(elements: Vector[Element]): Indent = new Indent(content ++ elements)
-
-  def add(line: String): Indent =
-    add(
-      line
-        .split('\n')
-        .map {
-          case s if s.isEmpty => EmptyLine
-          case s => Line(s)
-        }
-        .toVector
-    )
-
-  def <<(line: String): Indent = add(line)
-
-  def <<(o: Indent): Indent = add(o.content)
-
-  def >|(line: String) = add(AddIndent).add(line)
-  def >>|(line: String) = add(AddIndent) >| line
-  def >>>|(line: String) = add(AddIndent) >>| line
-  def >>>>|(line: String) = add(AddIndent) >>>| line
-  def >>>>>|(line: String) = add(AddIndent) >>>>| line
-
-  def >|(o: Indent) = add(AddIndent).add(o.content)
-  def >>|(o: Indent) = add(AddIndent) >| o
-  def >>>|(o: Indent) = add(AddIndent) >>| o
-  def >>>>|(o: Indent) = add(AddIndent) >>>| o
-  def >>>>>|(o: Indent) = add(AddIndent) >>>>| o
-
-  def >| = add(AddIndent)
-  def >>| = add(AddIndent) >|
-  def >>>| = add(AddIndent) >>|
-  def >>>>| = add(AddIndent) >>>|
-  def >>>>>| = add(AddIndent) >>>>|
-
-  def <|(line: String) = add(RemoveIndent).add(line)
-  def <<|(line: String) = add(RemoveIndent) <| line
-  def <<<|(line: String) = add(RemoveIndent) <<| line
-  def <<<<|(line: String) = add(RemoveIndent) <<<| line
-  def <<<<<|(line: String) = add(RemoveIndent) <<<<| line
-
-  def <|(o: Indent) = add(RemoveIndent).add(o.content)
-  def <<|(o: Indent) = add(RemoveIndent) <| o
-  def <<<|(o: Indent) = add(RemoveIndent) <<| o
-  def <<<<|(o: Indent) = add(RemoveIndent) <<<| o
-  def <<<<<|(o: Indent) = add(RemoveIndent) <<<<| o
-
-  def <| = add(RemoveIndent)
-  def <<| = add(RemoveIndent) <|
-  def <<<| = add(RemoveIndent) <<|
-  def <<<<| = add(RemoveIndent) <<<|
-  def <<<<<| = add(RemoveIndent) <<<<|
-
-  def format(indent: String): String =
-    content
-      .foldLeft(0 -> "") {
-        case ((count, acc), Line(str)) =>
-          val nl = if (acc.isEmpty) "" else "\n"
-          (count, s"$acc$nl${indent * count}$str")
-        case ((count, acc), EmptyLine) => (count, s"$acc\n")
-        case ((count, acc), AddIndent) => (count + 1, acc)
-        case ((count, acc), RemoveIndent) => (if (count == 0) 0 else count - 1, acc)
-      }
-      ._2
-
-  override def toString: String = format("•")
-
+  final case class String(s: scala.Predef.String) extends Element
+  final case object NewLine extends Element
+  final case object AddIndent extends Element
+  final case object RemoveIndent extends Element
 }
 
-object Indent {
-  def start: Indent = new Indent(Vector.empty)
+final class Indented(private[indent] val content: Vector[Element]) extends AnyVal {
+
+  def indent(implicit indent: Indentation): String = indentWith(indent.value)
+
+  def indentWith(indentation: String): String = {
+    val res = content
+      .foldLeft((0, false, "", "")) {
+        case ((count, false, line, acc), Element.String(str)) =>
+          (count, false, s"$line$str", acc)
+        case ((count, true, line, acc), Element.String(str)) =>
+          (count, false, s"$line${indentation * count}$str", acc)
+        case ((count, _, line, acc), Element.NewLine) if (line.matches(s"^(${indentation})+$$")) =>
+          (count, true, "", s"$acc\n")
+        case ((count, _, line, acc), Element.NewLine) =>
+          (count, true, "", s"$acc$line\n")
+        case ((count, nl, line, acc), Element.AddIndent) => (count + 1, nl, line, acc)
+        case ((count, nl, line, acc), Element.RemoveIndent) => (if (count == 0) 0 else count - 1, nl, line, acc)
+      }
+    s"${res._4}${res._3}"
+  }
+
+  override def toString: String = indentWith("•")
 }
