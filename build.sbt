@@ -28,6 +28,8 @@ lazy val root = (project in file("."))
 
 lazy val docs = (project in file("indent-docs"))
   .settings(
+    publish / skip := true,
+    mdocOut := (ThisBuild / baseDirectory).value,
     mdocVariables := Map(
       "VERSION" -> version.value
     )
