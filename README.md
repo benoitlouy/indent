@@ -3,50 +3,55 @@
 [![scalaci](https://github.com/benoitlouy/indent/workflows/Scala%20CI/badge.svg)](https://github.com/benoitlouy/indent/actions?query=workflow%3A%22Scala+CI%22)
 [![codecov](https://codecov.io/gh/benoitlouy/indent/branch/master/graph/badge.svg)](https://codecov.io/gh/benoitlouy/indent)
 
+Indentation aware string interpolation.
+
 To include indent in your project
 
-```scalac
+```scala
 libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.1.0-SNAPSHOT"
 ```
 
 ```scala
-import scala.language.postfixOps
-import indent._
+import indent.spaces2._
 
-val sectionContent = Indent.start <<
-  "Lorem ipsum" <<
-  "Indented list" >|
-  "- item 1" <<
-  "- item 2" <|
-// sectionContent: Indent = Lorem ipsum
+// create an Indented block
+val sectionContent = indent"""Lorem ipsum
+  |Indented list
+  |  - item 1
+  |  _ item 2"""
+// sectionContent: indent.Indented = Lorem ipsum
 // Indented list
 // •- item 1
-// •- item 2
+// •_ item 2
 
-// combining indent instances
-val prelude = Indent.start << "Header" << "1. First Section" >| sectionContent <| "2. Second Section" >| sectionContent <|
-// prelude: Indent = Header
-// 1. First Section
-// •Lorem ipsum
-// •Indented list
-// ••- item 1
-// ••- item 2
-// 2. Second Section
-// •Lorem ipsum
-// •Indented list
-// ••- item 1
-// ••- item 2
+// combining Indented blocks
+val doc = indent"""Header
+  |  1. First Section
+  |    ${sectionContent}
+  |  2. Second Section
+  |    ${sectionContent}"""
+// doc: indent.Indented = Header
+// •1. First Section
+// ••Lorem ipsum
+// ••Indented list
+// •••- item 1
+// •••_ item 2
+// •2. Second Section
+// ••Lorem ipsum
+// ••Indented list
+// •••- item 1
+// •••_ item 2
 
-println(prelude.format("  "))
+println(doc.indent)
 // Header
-// 1. First Section
-//   Lorem ipsum
-//   Indented list
-//     - item 1
-//     - item 2
-// 2. Second Section
-//   Lorem ipsum
-//   Indented list
-//     - item 1
-//     - item 2
+//   1. First Section
+//     Lorem ipsum
+//     Indented list
+//       - item 1
+//       _ item 2
+//   2. Second Section
+//     Lorem ipsum
+//     Indented list
+//       - item 1
+//       _ item 2
 ```
