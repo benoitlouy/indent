@@ -8,10 +8,10 @@ Indentation aware string interpolation.
 To include indent in your project
 
 ```scala
-libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.1.0-SNAPSHOT"
+libraryDependencies += "com.github.benoitlouy" %% "indent" % "@VERSION@"
 ```
 
-```scala
+```scala mdoc
 import indent.spaces2._
 
 // create an Indented block
@@ -19,10 +19,6 @@ val sectionContent = indent"""Lorem ipsum
   |Indented list
   |  - item 1
   |  _ item 2"""
-// sectionContent: indent.Indented = Lorem ipsum
-// Indented list
-// •- item 1
-// •_ item 2
 
 // combining Indented blocks
 val doc = indent"""Header
@@ -30,28 +26,6 @@ val doc = indent"""Header
   |    ${sectionContent}
   |  2. Second Section
   |    ${sectionContent}"""
-// doc: indent.Indented = Header
-// •1. First Section
-// ••Lorem ipsum
-// ••Indented list
-// •••- item 1
-// •••_ item 2
-// •2. Second Section
-// ••Lorem ipsum
-// ••Indented list
-// •••- item 1
-// •••_ item 2
 
 println(doc.indent)
-// Header
-//   1. First Section
-//     Lorem ipsum
-//     Indented list
-//       - item 1
-//       _ item 2
-//   2. Second Section
-//     Lorem ipsum
-//     Indented list
-//       - item 1
-//       _ item 2
 ```

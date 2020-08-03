@@ -26,6 +26,15 @@ lazy val root = (project in file("."))
     libraryDependencies += scalaTest % Test
   )
 
+lazy val docs = (project in file("indent-docs"))
+  .settings(
+    mdocVariables := Map(
+      "VERSION" -> version.value
+    )
+  )
+  .dependsOn(root)
+  .enablePlugins(MdocPlugin)
+
 ThisBuild / scmInfo := Some(
   ScmInfo(
     url("https://github.com/benoitlouy/indent"),
@@ -80,4 +89,4 @@ addCommandAlias("cov", ";clean;coverage;+test;coverageReport")
 addCommandAlias("fmt", ";scalafmtAll;scalafmtSbt")
 addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")
 addCommandAlias("fmtCheck", ";scalafmtCheckAll;scalafmtSbtCheck")
-addCommandAlias("check", ";cov;fixCheck;fmtCheck")
+addCommandAlias("check", ";cov;fixCheck;fmtCheck;docs/mdoc")
