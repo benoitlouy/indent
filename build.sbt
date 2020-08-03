@@ -64,12 +64,12 @@ ThisBuild / publishTo := {
 ThisBuild / publishMavenStyle := true
 ThisBuild / Test / publishArtifact := false
 
-ThisBuild / releaseTagName := s"${version.value}"
-ThisBuild / releaseVcsSign := true
-ThisBuild / releasePublishArtifactsAction := PgpKeys.publishSigned.value
-ThisBuild / releaseCrossBuild := true
+releaseTagName := s"${version.value}"
+releaseVcsSign := true
+releasePublishArtifactsAction := PgpKeys.publishSigned.value
+releaseCrossBuild := true
 
-ThisBuild / releaseProcess := Seq[ReleaseStep](
+releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
   runClean,
