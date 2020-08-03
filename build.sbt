@@ -50,7 +50,7 @@ ThisBuild / developers := List(
   )
 )
 
-ThisBuild / description := "Build multiline string with indentation"
+ThisBuild / description := "Indentation aware string interpolation"
 ThisBuild / licenses := List("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt"))
 ThisBuild / homepage := Some(url("https://github.com/benoitlouy/indent"))
 
