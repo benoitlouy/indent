@@ -1,5 +1,6 @@
 # indent
 
+[![maven](https://maven-badges.herokuapp.com/maven-central/com.github.benoitlouy/indent_2.13/badge.svg)](https://search.maven.org/artifact/com.github.benoitlouy/indent_2.13)
 [![scalaci](https://github.com/benoitlouy/indent/workflows/Scala%20CI/badge.svg)](https://github.com/benoitlouy/indent/actions?query=workflow%3A%22Scala+CI%22)
 [![codecov](https://codecov.io/gh/benoitlouy/indent/branch/master/graph/badge.svg)](https://codecov.io/gh/benoitlouy/indent)
 

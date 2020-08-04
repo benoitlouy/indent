@@ -28,6 +28,8 @@ lazy val root = (project in file("."))
 
 lazy val docs = (project in file("indent-docs"))
   .settings(
+    publish / skip := true,
+    mdocOut := (ThisBuild / baseDirectory).value,
     mdocVariables := Map(
       "VERSION" -> version.value
     )
@@ -76,6 +78,9 @@ releaseProcess := Seq[ReleaseStep](
   runTest,
   setReleaseVersion,
   commitReleaseVersion,
+  releaseStepInputTask(docs / mdoc),
+  releaseStepCommand("git add README.md"),
+  releaseStepCommand("""git commit -m "update README""""),
   tagRelease,
   releaseStepCommandAndRemaining("+publishSigned"),
   setNextVersion,
