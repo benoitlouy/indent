@@ -16,7 +16,7 @@ final class Indented(private[indent] val content: Vector[Element]) extends AnyVa
 
   def indentWith(indentation: String): String = {
     val res = content
-      .foldLeft((0, false, "", "")) {
+      .foldLeft((0, true, "", "")) {
         case ((count, false, line, acc), Element.String(str)) =>
           (count, false, s"$line$str", acc)
         case ((count, true, line, acc), Element.String(str)) =>
@@ -28,6 +28,7 @@ final class Indented(private[indent] val content: Vector[Element]) extends AnyVa
         case ((count, nl, line, acc), Element.AddIndent) => (count + 1, nl, line, acc)
         case ((count, nl, line, acc), Element.RemoveIndent) => (if (count == 0) 0 else count - 1, nl, line, acc)
       }
+
     s"${res._4}${res._3}"
   }
 
