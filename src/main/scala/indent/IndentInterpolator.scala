@@ -11,7 +11,7 @@ trait IndentInterpolatorInstances {
 }
 
 class StringOps(val s: String) extends AnyVal {
-  def indented(implicit indentation: Indentation): Indented = Utils.toIndented(indentation.value, Vector(Part.String(s)))
+  def indented(implicit indentation: Indentation): Indented = indentedWith(indentation.value)
   def indentedWith(indentation: String): Indented = Utils.toIndented(indentation, Vector(Part.String(s)))
 }
 
