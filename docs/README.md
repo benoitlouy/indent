@@ -9,24 +9,52 @@ Indentation aware string interpolation.
 To include indent in your project
 
 ```scala
-libraryDependencies += "com.github.benoitlouy" %% "indent" % "@VERSION@"
+libraryDependencies += "@ORGANIZATION@" %% "@NAME@" % "@VERSION@"
 ```
 
 ```scala mdoc
-import indent.spaces2._
+import indent._
+import spaces2._
 
-// create an Indented block
-val sectionContent = indent"""Lorem ipsum
+// create an Indented block from a String
+val sectionContent = """Lorem ipsum
   |Indented list
   |  - item 1
-  |  _ item 2"""
+  |  - item 2""".stripMargin.indented
 
-// combining Indented blocks
+// combine Indented blocks while maintaining indentation
 val doc = indent"""Header
   |  1. First Section
   |    ${sectionContent}
   |  2. Second Section
   |    ${sectionContent}"""
 
-println(doc.indent)
+// generate a String with 2 spaces for indentation
+doc.indent
+
+// generate a String with 4 spaces for indentation
+doc.indentWith("    ")
+```
+
+The library provides instances for tab, 2 and 4 space indentation.
+
+4-space indentation
+```scala
+import indent._
+import spaces4._
+```
+
+tab indentation
+```scala
+import indent._
+import tab._
+```
+
+Using a custom String for indentation can be achieved by creating an instance of `Indent` and importing it's members.
+
+```scala
+import indent._
+
+val spaces3 = Indent.using("   ")
+import spaces3._
 ```

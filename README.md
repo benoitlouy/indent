@@ -9,50 +9,89 @@ Indentation aware string interpolation.
 To include indent in your project
 
 ```scala
-libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.2.0"
+libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.3.0-SNAPSHOT"
 ```
 
 ```scala
-import indent.spaces2._
+import indent._
+import spaces2._
 
-// create an Indented block
-val sectionContent = indent"""Lorem ipsum
+// create an Indented block from a String
+val sectionContent = """Lorem ipsum
   |Indented list
   |  - item 1
-  |  _ item 2"""
-// sectionContent: indent.Indented = Lorem ipsum
+  |  - item 2""".stripMargin.indented
+// sectionContent: Indented = Lorem ipsum
 // Indented list
 // •- item 1
-// •_ item 2
+// •- item 2
 
-// combining Indented blocks
+// combine Indented blocks while maintaining indentation
 val doc = indent"""Header
   |  1. First Section
   |    ${sectionContent}
   |  2. Second Section
   |    ${sectionContent}"""
-// doc: indent.Indented = Header
+// doc: Indented = Header
 // •1. First Section
 // ••Lorem ipsum
 // ••Indented list
 // •••- item 1
-// •••_ item 2
+// •••- item 2
 // •2. Second Section
 // ••Lorem ipsum
 // ••Indented list
 // •••- item 1
-// •••_ item 2
+// •••- item 2
 
-println(doc.indent)
-// Header
+// generate a String with 2 spaces for indentation
+doc.indent
+// res0: String = """Header
 //   1. First Section
 //     Lorem ipsum
 //     Indented list
 //       - item 1
-//       _ item 2
+//       - item 2
 //   2. Second Section
 //     Lorem ipsum
 //     Indented list
 //       - item 1
-//       _ item 2
+//       - item 2"""
+
+// generate a String with 4 spaces for indentation
+doc.indentWith("    ")
+// res1: String = """Header
+//     1. First Section
+//         Lorem ipsum
+//         Indented list
+//             - item 1
+//             - item 2
+//     2. Second Section
+//         Lorem ipsum
+//         Indented list
+//             - item 1
+//             - item 2"""
+```
+
+The library provides instances for tab, 2 and 4 space indentation.
+
+4-space indentation
+```scala
+import indent._
+import spaces4._
+```
+
+tab indentation
+```scala
+import indent._
+import tab._
+```
+
+Using a custom String for indentation can be achieved by instantiating an instance of `Indent` and importing it's members.
+
+```scala
+import indent._
+
+val spaces3 = Indent.using("   ")
+import spaces3._
 ```

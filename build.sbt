@@ -31,6 +31,8 @@ lazy val docs = (project in file("indent-docs"))
     publish / skip := true,
     mdocOut := (ThisBuild / baseDirectory).value,
     mdocVariables := Map(
+      "ORGANIZATION" -> organization.value,
+      "NAME" -> (root / name).value,
       "VERSION" -> version.value
     )
   )

@@ -116,4 +116,29 @@ class IndentSpec extends AnyFreeSpecLike {
       |}""".stripMargin
     assert(result.indent == expected)
   }
+
+  "String.indented creates Indented instance from string" in {
+    import indent.spaces2._
+
+    val s = """Foo
+    |  test
+    |Bar
+    |    test2""".stripMargin.indented
+
+    val result = indent"""  $s"""
+
+    val expected = """  Foo
+    |    test
+    |  Bar
+    |      test2""".stripMargin
+
+    assert(result.indent == expected)
+  }
+
+  "custom indentation" in {
+    val spaces3 = Indent.using("   ")
+    import spaces3._
+
+    assert("   test".indented.indentWith("") == "test")
+  }
 }
