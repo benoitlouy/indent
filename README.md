@@ -9,7 +9,7 @@ Indentation aware string interpolation.
 To include indent in your project
 
 ```scala
-libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.3.0-SNAPSHOT"
+libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.3.0"
 ```
 
 ```scala
@@ -87,7 +87,7 @@ import indent._
 import tab._
 ```
 
-Using a custom String for indentation can be achieved by instantiating an instance of `Indent` and importing it's members.
+Using a custom String for indentation can be achieved by creating an instance of `Indent` and importing it's members.
 
 ```scala
 import indent._
