@@ -50,7 +50,7 @@ import indent._
 import tab._
 ```
 
-Using a custom String for indentation can be achieved by instantiating an instance of `Indent` and importing it's members.
+Using a custom String for indentation can be achieved by creating an instance of `Indent` and importing it's members.
 
 ```scala
 import indent._
