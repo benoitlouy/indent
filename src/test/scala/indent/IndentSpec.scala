@@ -1,10 +1,8 @@
 package indent
 
-import org.scalatest.freespec.AnyFreeSpecLike
+class IndentSpec extends munit.FunSuite {
 
-class IndentSpec extends AnyFreeSpecLike {
-
-  "toString" in {
+  test("toString") {
     import indent.spaces2._
 
     val data = indent"""Header
@@ -15,7 +13,7 @@ class IndentSpec extends AnyFreeSpecLike {
     assert(data.toString == data.indentWith("•"))
   }
 
-  "interpolation of variable of type other than Indent" in {
+  test("interpolation of variable of type other than Indent") {
     import indent.spaces2._
 
     val header = "Header"
@@ -33,7 +31,7 @@ class IndentSpec extends AnyFreeSpecLike {
     assert(data.indent == expected)
   }
 
-  "composition" in {
+  test("composition") {
     import indent.spaces2._
     val section = indent"""1. Section
     |  a. Subsection"""
@@ -54,7 +52,7 @@ class IndentSpec extends AnyFreeSpecLike {
     assert(data.indent == expected)
   }
 
-  "nested" in {
+  test("nested") {
     import indent.spaces2._
 
     val f = indent"""def f(a: Int, b: Int): Int =
@@ -90,7 +88,7 @@ class IndentSpec extends AnyFreeSpecLike {
     assert(outer.indentWith("  ") == expected)
   }
 
-  "recursive" in {
+  test("recursive") {
     import indent.spaces2._
 
     def rec(depth: Int): Indented =
@@ -117,7 +115,7 @@ class IndentSpec extends AnyFreeSpecLike {
     assert(result.indent == expected)
   }
 
-  "String.indented creates Indented instance from string" in {
+  test("String.indented creates Indented instance from string") {
     import indent.spaces2._
 
     val s = """Foo
@@ -135,7 +133,7 @@ class IndentSpec extends AnyFreeSpecLike {
     assert(result.indent == expected)
   }
 
-  "custom indentation" in {
+  test("custom indentation") {
     val spaces3 = Indent.using("   ")
     import spaces3._
 
