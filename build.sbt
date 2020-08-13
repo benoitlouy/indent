@@ -11,19 +11,15 @@ ThisBuild / scalaVersion := scala213
 ThisBuild / organization := "com.github.benoitlouy"
 ThisBuild / organizationName := "benoitlouy"
 ThisBuild / semanticdbEnabled := true
+ThisBuild / semanticdbVersion := "4.3.20"
 ThisBuild / scalafixDependencies += organizeImports
-
-inThisBuild(
-  List(
-    addCompilerPlugin(semanticdbScalac.cross(CrossVersion.full))
-  )
-)
+ThisBuild / testFrameworks += new TestFramework("munit.Framework")
 
 lazy val root = (project in file("."))
   .settings(
     name := "indent",
     crossScalaVersions := supportedScalaVersions,
-    libraryDependencies += scalaTest % Test
+    libraryDependencies += munit % Test
   )
 
 lazy val docs = (project in file("indent-docs"))

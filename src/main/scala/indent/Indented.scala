@@ -5,9 +5,9 @@ sealed trait Element extends Product with Serializable
 object Element {
 
   final case class String(s: scala.Predef.String) extends Element
-  final case object NewLine extends Element
-  final case object AddIndent extends Element
-  final case object RemoveIndent extends Element
+  case object NewLine extends Element
+  case object AddIndent extends Element
+  case object RemoveIndent extends Element
 }
 
 final class Indented(private[indent] val content: Vector[Element]) extends AnyVal {
