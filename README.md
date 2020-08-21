@@ -9,8 +9,9 @@ Indentation aware string interpolation.
 To include indent in your project
 
 ```scala
-libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.3.0"
+libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.4.0"
 ```
+## Usage
 
 ```scala
 import indent._
@@ -71,6 +72,26 @@ doc.indentWith("    ")
 //         Indented list
 //             - item 1
 //             - item 2"""
+
+// an indented block can also be generated from a sequence of Indented
+val indentedBlocks = Vector(
+  indent"""  1. First Entry
+          |    Content""",
+  indent"""  2. Second Entry
+          |    Other Content"""
+).indented
+// indentedBlocks: Indented = •1. First Entry
+// ••Content
+// •2. Second Entry
+// ••Other Content
+
+indent"""Header
+  |  $indentedBlocks"""
+// res2: Indented = Header
+// ••1. First Entry
+// •••Content
+// ••2. Second Entry
+// •••Other Content
 ```
 
 The library provides instances for tab, 2 and 4 space indentation.
