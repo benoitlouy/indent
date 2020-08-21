@@ -21,8 +21,6 @@ final class Indented(private[indent] val content: Vector[Element]) extends AnyVa
           (count, false, s"$line$str", acc)
         case ((count, true, line, acc), Element.String(str)) =>
           (count, false, s"$line${indentation * count}$str", acc)
-        case ((count, _, line, acc), Element.NewLine) if (line.matches(s"^(${indentation})+$$")) =>
-          (count, true, "", s"$acc\n")
         case ((count, _, line, acc), Element.NewLine) =>
           (count, true, "", s"$acc$line\n")
         case ((count, nl, line, acc), Element.AddIndent) => (count + 1, nl, line, acc)
