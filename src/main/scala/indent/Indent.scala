@@ -8,11 +8,33 @@ trait IndentInterpolatorInstances {
   object tab extends Indent("\t")
 
   implicit def toIndentedStringOps(s: String): StringOps = new StringOps(s)
+  implicit def toIndentedSeqOps(s: Seq[Indented]): SeqOps = new SeqOps(s)
 }
 
 class StringOps(val s: String) extends AnyVal {
   def indented(implicit indentation: Indentation): Indented = indentedWith(indentation.value)
   def indentedWith(indentation: String): Indented = Utils.toIndented(indentation, Vector(Part.String(s)))
+}
+
+class SeqOps(val s: Seq[Indented]) extends AnyVal {
+  def indented: Indented = {
+    if (s.isEmpty) new Indented(Vector.empty)
+    else {
+      def reset(i: Indented): Vector[Element] = {
+        val count = i.content.foldLeft(0) {
+          case (count, Element.AddIndent) => count + 1
+          case (count, Element.RemoveIndent) => count - 1
+          case (count, _) => count
+        }
+        if (count > 0) Vector.fill(count)(Element.RemoveIndent)
+        else Vector.fill(-count)(Element.AddIndent)
+      }
+      val es = s.tail.foldLeft(s.head.content ++ reset(s.head)) { (acc, i) =>
+        (acc :+ Element.NewLine) ++ i.content ++ reset(i)
+      }
+      new Indented(es)
+    }
+  }
 }
 
 sealed trait Part extends Product with Serializable
@@ -71,6 +93,10 @@ private[indent] object Utils {
           (acc ++ indents ++ l) -> indentCount
       }
       ._1
+      .filter {
+        case Element.String("") => false
+        case _ => true
+      }
 
     new Indented(res)
   }
