@@ -163,18 +163,29 @@ class IndentSpec extends munit.FunSuite {
     |${(1 to 4).map(genReversed(_, 4)).indented}
     |  Done"""
 
-    println(b)
+    val expectedB = """Test
+    |      1. Entry
+    |    2. Entry
+    |  3. Entry
+    |4. Entry
+    |  Done""".stripMargin
 
-    val c = Seq(
-      "  1.Entry\nfoo".indented,
-      "  2.Entry\nbar".indented
-    )
+    assert(b.indent == expectedB)
 
-    val d = indent"""Test
-    |  ${c.indented}
-    |  Done"""
+    val c = indent"""Test
+    |  ${Seq(
+      "  1. Entry\nfoo".indented,
+      "  2. Entry\nbar".indented
+    ).indented}
+    |Done"""
 
-    println(d)
+    val expectedC = """Test
+    |    1. Entry
+    |  foo
+    |    2. Entry
+    |  bar
+    |Done""".stripMargin
 
+    assert(c.indent == expectedC)
   }
 }
