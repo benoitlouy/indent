@@ -139,4 +139,53 @@ class IndentSpec extends munit.FunSuite {
 
     assert("   test".indented.indentWith("") == "test")
   }
+
+  test("Seq.indented") {
+    import indent.spaces2._
+
+    def gen(i: Int): Indented = s"${Vector.fill(i)("  ").mkString}$i. Entry".indented
+    def genReversed(i: Int, total: Int): Indented = s"${Vector.fill(total - i)("  ").mkString}$i. Entry".indented
+
+    val a = indent"""Test
+    |${(1 to 4).map(gen).indented}
+    |  Done"""
+
+    val expectedA = """Test
+    |  1. Entry
+    |    2. Entry
+    |      3. Entry
+    |        4. Entry
+    |  Done""".stripMargin
+
+    assert(a.indent == expectedA)
+
+    val b = indent"""Test
+    |${(1 to 4).map(genReversed(_, 4)).indented}
+    |  Done"""
+
+    val expectedB = """Test
+    |      1. Entry
+    |    2. Entry
+    |  3. Entry
+    |4. Entry
+    |  Done""".stripMargin
+
+    assert(b.indent == expectedB)
+
+    val c = indent"""Test
+    |  ${Seq(
+      "  1. Entry\nfoo".indented,
+      "  2. Entry\nbar".indented
+    ).indented}
+    |Done"""
+
+    val expectedC = """Test
+    |    1. Entry
+    |  foo
+    |    2. Entry
+    |  bar
+    |Done""".stripMargin
+
+    assert(c.indent == expectedC)
+  }
 }
