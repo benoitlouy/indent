@@ -11,6 +11,7 @@ To include indent in your project
 ```scala
 libraryDependencies += "@ORGANIZATION@" %% "@NAME@" % "@VERSION@"
 ```
+## Usage
 
 ```scala mdoc
 import indent._
@@ -34,6 +35,17 @@ doc.indent
 
 // generate a String with 4 spaces for indentation
 doc.indentWith("    ")
+
+// an indented block can also be generated from a sequence of Indented
+val indentedBlocks = Vector(
+  indent"""  1. First Entry
+          |    Content""",
+  indent"""  2. Second Entry
+          |    Other Content"""
+).indented
+
+indent"""Header
+  |  $indentedBlocks"""
 ```
 
 The library provides instances for tab, 2 and 4 space indentation.
