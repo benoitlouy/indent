@@ -17,7 +17,9 @@ class StringOps(val s: String) extends AnyVal {
 }
 
 class SeqOps(val s: Seq[Indented]) extends AnyVal {
-  def indented: Indented = {
+  def indented: Indented = _indented(None)
+  def indented(sep: String): Indented = _indented(Some(sep))
+  private def _indented(sep: Option[String]): Indented = {
     if (s.isEmpty) new Indented(Vector.empty)
     else {
       def reset(i: Indented): Vector[Element] = {
@@ -30,7 +32,7 @@ class SeqOps(val s: Seq[Indented]) extends AnyVal {
         else Vector.fill(-count)(Element.AddIndent)
       }
       val es = s.tail.foldLeft(s.head.content ++ reset(s.head)) { (acc, i) =>
-        (acc :+ Element.NewLine) ++ i.content ++ reset(i)
+        acc ++ Vector(sep.map(Element.String), Some(Element.NewLine)).flatten ++ i.content ++ reset(i)
       }
       new Indented(es)
     }
@@ -114,7 +116,7 @@ class Indent(indent: String) { outer =>
   implicit val indentation: Indentation = Indentation(indent)
 
   implicit class IndentInterpolator(stringContext: StringContext) {
-    final def indent(indents: Any*): Indented = {
+    final def i(indents: Any*): Indented = {
       def stripTrailingPart(s: String) = {
         val (pre, post) = s.span(c => !isLineBreak(c))
         pre + post.stripMargin

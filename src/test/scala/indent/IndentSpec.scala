@@ -5,7 +5,7 @@ class IndentSpec extends munit.FunSuite {
   test("toString") {
     import indent.spaces2._
 
-    val data = indent"""Header
+    val data = i"""Header
     |  1. Section
     |    a. Subsection
     |  2. Section"""
@@ -18,7 +18,7 @@ class IndentSpec extends munit.FunSuite {
 
     val header = "Header"
     val i = 1
-    val data = indent"""$header
+    val data = i"""$header
     |  $i. Section
     |    a. Subsection
     |  2. Section"""
@@ -33,10 +33,10 @@ class IndentSpec extends munit.FunSuite {
 
   test("composition") {
     import indent.spaces2._
-    val section = indent"""1. Section
+    val section = i"""1. Section
     |  a. Subsection"""
 
-    val data = indent"""Header
+    val data = i"""Header
     |  $section
     |  2. Section
     |
@@ -55,10 +55,10 @@ class IndentSpec extends munit.FunSuite {
   test("nested") {
     import indent.spaces2._
 
-    val f = indent"""def f(a: Int, b: Int): Int =
+    val f = i"""def f(a: Int, b: Int): Int =
     |  a + b"""
 
-    val inner = indent"""object Inner {
+    val inner = i"""object Inner {
     |  val i: Int = 42
     |  val s: String = "foo"
     |  $f
@@ -68,7 +68,7 @@ class IndentSpec extends munit.FunSuite {
     |  val arr: Array[String] = Array("foo", "bar")
     |}"""
 
-    val outer = indent"""object Wrapper {
+    val outer = i"""object Wrapper {
       |  ${inner}
       |}"""
 
@@ -93,11 +93,11 @@ class IndentSpec extends munit.FunSuite {
 
     def rec(depth: Int): Indented =
       if (depth == 0)
-        indent""
+        i""
       else
-        indent"""Rec {
-          |  ${rec(depth - 1)}
-          |}"""
+        i"""Rec {
+           |  ${rec(depth - 1)}
+           |}"""
 
     val result = rec(5)
 
@@ -123,7 +123,7 @@ class IndentSpec extends munit.FunSuite {
     |Bar
     |    test2""".stripMargin.indented
 
-    val result = indent"""  $s"""
+    val result = i"""  $s"""
 
     val expected = """  Foo
     |    test
@@ -146,7 +146,7 @@ class IndentSpec extends munit.FunSuite {
     def gen(i: Int): Indented = s"${Vector.fill(i)("  ").mkString}$i. Entry".indented
     def genReversed(i: Int, total: Int): Indented = s"${Vector.fill(total - i)("  ").mkString}$i. Entry".indented
 
-    val a = indent"""Test
+    val a = i"""Test
     |${(1 to 4).map(gen).indented}
     |  Done"""
 
@@ -159,7 +159,7 @@ class IndentSpec extends munit.FunSuite {
 
     assert(a.indent == expectedA)
 
-    val b = indent"""Test
+    val b = i"""Test
     |${(1 to 4).map(genReversed(_, 4)).indented}
     |  Done"""
 
@@ -172,7 +172,7 @@ class IndentSpec extends munit.FunSuite {
 
     assert(b.indent == expectedB)
 
-    val c = indent"""Test
+    val c = i"""Test
     |  ${Seq(
       "  1. Entry\nfoo".indented,
       "  2. Entry\nbar".indented
@@ -187,5 +187,16 @@ class IndentSpec extends munit.FunSuite {
     |Done""".stripMargin
 
     assert(c.indent == expectedC)
+
+    val d = i"""Vector(
+    |  ${Vector(i"a", i"b").indented(",")}
+    |)"""
+
+    val expectedD = """Vector(
+      |  a,
+      |  b
+      |)""".stripMargin
+
+    assert(d.indent == expectedD)
   }
 }
