@@ -9,7 +9,7 @@ Indentation aware string interpolation.
 To include indent in your project
 
 ```scala
-libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.4.0"
+libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.5.0"
 ```
 ## Usage
 
@@ -19,20 +19,20 @@ import spaces2._
 
 // create an Indented block from a String
 val sectionContent = """Lorem ipsum
-  |Indented list
-  |  - item 1
-  |  - item 2""".stripMargin.indented
+                       |Indented list
+                       |  - item 1
+                       |  - item 2""".stripMargin.indented
 // sectionContent: Indented = Lorem ipsum
 // Indented list
 // •- item 1
 // •- item 2
 
 // combine Indented blocks while maintaining indentation
-val doc = indent"""Header
-  |  1. First Section
-  |    ${sectionContent}
-  |  2. Second Section
-  |    ${sectionContent}"""
+val doc = i"""Header
+             |  1. First Section
+             |    ${sectionContent}
+             |  2. Second Section
+             |    ${sectionContent}"""
 // doc: Indented = Header
 // •1. First Section
 // ••Lorem ipsum
@@ -75,18 +75,18 @@ doc.indentWith("    ")
 
 // an indented block can also be generated from a sequence of Indented
 val indentedBlocks = Vector(
-  indent"""  1. First Entry
-          |    Content""",
-  indent"""  2. Second Entry
-          |    Other Content"""
+  i"""  1. First Entry
+     |    Content""",
+  i"""  2. Second Entry
+      |    Other Content"""
 ).indented
 // indentedBlocks: Indented = •1. First Entry
 // ••Content
 // •2. Second Entry
 // ••Other Content
 
-indent"""Header
-  |  $indentedBlocks"""
+i"""Header
+   |  $indentedBlocks"""
 // res2: Indented = Header
 // ••1. First Entry
 // •••Content
