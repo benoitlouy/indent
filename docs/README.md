@@ -19,16 +19,16 @@ import spaces2._
 
 // create an Indented block from a String
 val sectionContent = """Lorem ipsum
-  |Indented list
-  |  - item 1
-  |  - item 2""".stripMargin.indented
+                       |Indented list
+                       |  - item 1
+                       |  - item 2""".stripMargin.indented
 
 // combine Indented blocks while maintaining indentation
-val doc = indent"""Header
-  |  1. First Section
-  |    ${sectionContent}
-  |  2. Second Section
-  |    ${sectionContent}"""
+val doc = i"""Header
+             |  1. First Section
+             |    ${sectionContent}
+             |  2. Second Section
+             |    ${sectionContent}"""
 
 // generate a String with 2 spaces for indentation
 doc.indent
@@ -38,14 +38,14 @@ doc.indentWith("    ")
 
 // an indented block can also be generated from a sequence of Indented
 val indentedBlocks = Vector(
-  indent"""  1. First Entry
-          |    Content""",
-  indent"""  2. Second Entry
-          |    Other Content"""
+  i"""  1. First Entry
+     |    Content""",
+  i"""  2. Second Entry
+      |    Other Content"""
 ).indented
 
-indent"""Header
-  |  $indentedBlocks"""
+i"""Header
+   |  $indentedBlocks"""
 ```
 
 The library provides instances for tab, 2 and 4 space indentation.
