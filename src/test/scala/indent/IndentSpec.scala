@@ -206,8 +206,6 @@ class IndentSpec extends munit.FunSuite {
     |  with 2
     |Done""".stripMargin
 
-    println(e)
-
     assert(e.indent == expectedE)
   }
 }
