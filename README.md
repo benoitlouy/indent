@@ -9,7 +9,7 @@ Indentation aware string interpolation.
 To include indent in your project
 
 ```scala
-libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.5.0"
+libraryDependencies += "com.github.benoitlouy" %% "indent" % "0.6.0"
 ```
 ## Usage
 
