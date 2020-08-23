@@ -91,7 +91,16 @@ private[indent] object Utils {
             case (count, _) => count
           }
           val reset = if (diff > 0) Vector.fill(diff)(Element.RemoveIndent) else Vector.fill(-diff)(Element.AddIndent)
-          (acc ++ i.content ++ reset) -> lastIndentCount
+          val content =
+            if (
+              !i.content.exists {
+                case _: Element.String => true
+                case Element.NewLine => true
+                case _ => false
+              }
+            ) Vector(Element.RemoveLineIfEmpty)
+            else i.content
+          (acc ++ content ++ reset) -> lastIndentCount
         case ((acc, lastIndentCount), Part.String(s)) =>
           val (indentCount, strippedLine) = countAndStripIndent(indent, 0, s)
           val diff = indentCount - lastIndentCount

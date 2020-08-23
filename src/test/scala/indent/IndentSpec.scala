@@ -106,7 +106,6 @@ class IndentSpec extends munit.FunSuite {
       |    Rec {
       |      Rec {
       |        Rec {
-      |
       |        }
       |      }
       |    }
@@ -207,5 +206,23 @@ class IndentSpec extends munit.FunSuite {
     |Done""".stripMargin
 
     assert(e.indent == expectedE)
+  }
+
+  test("empty Seq.indented") {
+    import indent.spaces2._
+    val a = i"""{
+    |  ${Vector.empty[Indented].indented}
+    |  ${Vector.empty[Indented].indented}a
+    |  b${Vector.empty[Indented].indented}
+    |}
+    |${Vector.empty[Indented].indented}"""
+
+    val expected = """{
+      |  a
+      |  b
+      |}""".stripMargin
+
+    assert(a.indent == expected)
+
   }
 }
