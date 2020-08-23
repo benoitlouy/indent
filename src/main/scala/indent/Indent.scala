@@ -17,8 +17,8 @@ class StringOps(val s: String) extends AnyVal {
 }
 
 class SeqOps(val s: Seq[Indented]) extends AnyVal {
-  def indented: Indented = indentedWith("", "")
-  def indentedWith(before: String = "", after: String = ""): Indented = {
+  def indented: Indented = indentedWith()
+  def indentedWith(before: String = "", after: String = ""): Indented = { // scalafix:ok
     if (s.isEmpty) new Indented(Vector.empty)
     else {
       def reset(i: Indented): Vector[Element] = {
