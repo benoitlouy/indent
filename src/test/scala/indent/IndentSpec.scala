@@ -189,7 +189,7 @@ class IndentSpec extends munit.FunSuite {
     assert(c.indent == expectedC)
 
     val d = i"""Vector(
-    |  ${Vector(i"a", i"b").indented(",")}
+    |  ${Vector(i"a", i"b").indentedWith(before = ",")}
     |)"""
 
     val expectedD = """Vector(
@@ -198,5 +198,16 @@ class IndentSpec extends munit.FunSuite {
       |)""".stripMargin
 
     assert(d.indent == expectedD)
+
+    val e = i"""Test ${Vector(i"  1", i"  2").indentedWith(after = "with ")}
+    |Done"""
+
+    val expectedE = """Test 1
+    |  with 2
+    |Done""".stripMargin
+
+    println(e)
+
+    assert(e.indent == expectedE)
   }
 }

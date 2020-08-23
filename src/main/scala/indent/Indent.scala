@@ -17,9 +17,8 @@ class StringOps(val s: String) extends AnyVal {
 }
 
 class SeqOps(val s: Seq[Indented]) extends AnyVal {
-  def indented: Indented = _indented(None)
-  def indented(sep: String): Indented = _indented(Some(sep))
-  private def _indented(sep: Option[String]): Indented = {
+  def indented: Indented = indentedWith("", "")
+  def indentedWith(before: String = "", after: String = ""): Indented = {
     if (s.isEmpty) new Indented(Vector.empty)
     else {
       def reset(i: Indented): Vector[Element] = {
@@ -32,7 +31,16 @@ class SeqOps(val s: Seq[Indented]) extends AnyVal {
         else Vector.fill(-count)(Element.AddIndent)
       }
       val es = s.tail.foldLeft(s.head.content ++ reset(s.head)) { (acc, i) =>
-        acc ++ Vector(sep.map(Element.String), Some(Element.NewLine)).flatten ++ i.content ++ reset(i)
+        val content = if (after.nonEmpty) {
+          val index = i.content.indexWhere {
+            case _: Element.String => true
+            case _ => false
+          }
+          val (part1, part2) = i.content.splitAt(if (index == -1) i.content.length else index)
+          (part1 :+ Element.String(after)) ++ part2
+        } else i.content
+
+        acc ++ Vector(if (before.isEmpty) None else Some(Element.String(before)), Some(Element.NewLine)).flatten ++ content ++ reset(i)
       }
       new Indented(es)
     }
