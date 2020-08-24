@@ -224,4 +224,12 @@ class IndentSpec extends munit.FunSuite {
 
     assert(a.indent == expected)
   }
+
+  test("isEmpty nonEmpty") {
+    import indent.spaces2._
+
+    assert(i"".isEmpty)
+    assert(Vector.empty[Indented].isEmpty)
+    assert(i"Lorem ipsum".nonEmpty)
+  }
 }
