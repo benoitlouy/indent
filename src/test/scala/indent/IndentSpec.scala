@@ -223,6 +223,5 @@ class IndentSpec extends munit.FunSuite {
       |}""".stripMargin
 
     assert(a.indent == expected)
-
   }
 }
