@@ -11,7 +11,11 @@ object Element {
   case object RemoveLineIfEmpty extends Element
 }
 
-final class Indented(private[indent] val content: Vector[Element]) extends AnyVal {
+final class Indented(private[indent] val content: Vector[Element]) {
+
+  def isEmpty: Boolean = content.isEmpty
+
+  def nonEmpty: Boolean = !isEmpty
 
   def indent(implicit indent: Indentation): String = indentWith(indent.value)
 
