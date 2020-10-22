@@ -232,4 +232,18 @@ class IndentSpec extends munit.FunSuite {
     assert(Vector.empty[Indented].isEmpty)
     assert(i"Lorem ipsum".nonEmpty)
   }
+
+  test("Seq.indentedWith") {
+    import indent.spaces2._
+
+    val expected = """a,
+    |
+    |b,
+    |
+    |c""".stripMargin
+
+    val res = Vector(i"a", i"b", i"c").indentedWith(before = ",", newlines = 2)
+
+    assert(res.indent == expected)
+  }
 }

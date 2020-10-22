@@ -11,7 +11,7 @@ ThisBuild / scalaVersion := scala213
 ThisBuild / organization := "com.github.benoitlouy"
 ThisBuild / organizationName := "benoitlouy"
 ThisBuild / semanticdbEnabled := true
-ThisBuild / semanticdbVersion := "4.3.20"
+ThisBuild / semanticdbVersion := "4.3.24"
 ThisBuild / scalafixDependencies += organizeImports
 ThisBuild / testFrameworks += new TestFramework("munit.Framework")
 

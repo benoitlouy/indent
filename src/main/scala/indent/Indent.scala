@@ -18,7 +18,7 @@ class StringOps(val s: String) extends AnyVal {
 
 class SeqOps(val s: Seq[Indented]) extends AnyVal {
   def indented: Indented = indentedWith()
-  def indentedWith(before: String = "", after: String = ""): Indented = { // scalafix:ok
+  def indentedWith(before: String = "", after: String = "", newlines: Int = 1): Indented = { // scalafix:ok
     if (s.isEmpty) new Indented(Vector.empty)
     else {
       def reset(i: Indented): Vector[Element] = {
@@ -40,7 +40,7 @@ class SeqOps(val s: Seq[Indented]) extends AnyVal {
           (part1 :+ Element.String(after)) ++ part2
         } else i.content
 
-        acc ++ Vector(if (before.isEmpty) None else Some(Element.String(before)), Some(Element.NewLine)).flatten ++ content ++ reset(i)
+        acc ++ (if (before.isEmpty) Vector.empty else Vector(Element.String(before))) ++ Vector.fill(newlines)(Element.NewLine) ++ content ++ reset(i)
       }
       new Indented(es)
     }
@@ -48,6 +48,7 @@ class SeqOps(val s: Seq[Indented]) extends AnyVal {
 }
 
 sealed trait Part extends Product with Serializable
+
 object Part {
   final case class String(s: scala.Predef.String) extends Part
   final case class Indented(i: indent.Indented) extends Part
