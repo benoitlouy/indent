@@ -23,7 +23,11 @@ jobs:
     #     java-version: 1.8
     - name: Run checks
       run: sbt check
-    # - name: Upload coverage
     #   uses: codecov/codecov-action@v1
+    - name: Upload coverage
+      uses: codecov/codecov-action@v4
+      with:
+        fail_ci_if_error: true # optional (default = false)
+        token: ${{ secrets.CODECOV_TOKEN }} # required
     - name: Publish Local
       run: sbt '+publishLocal'
