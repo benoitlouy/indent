@@ -21,12 +21,12 @@ final class Indented(private[indent] val content: Vector[Element]) {
 
   def indentWith(indentation: String): String = {
     val (curCount, _, _, line, acc, empty) = content
-    // current line indent level
-    // indent level count
-    // follow insertion of a new line
-    // line being built
-    // previous lines
-    // line should not be inserted if true
+      // current line indent level
+      // indent level count
+      // follow insertion of a new line
+      // line being built
+      // previous lines
+      // line should not be inserted if true
       .foldLeft((0, 0, true, "", "", false)) {
         case ((curCount, count, _, line, acc, _), Element.RemoveLineIfEmpty) => (curCount, count, false, line, acc, true)
 

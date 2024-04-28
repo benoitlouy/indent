@@ -17,11 +17,11 @@ jobs:
       with:
         github_access_token: ${{ secrets.GITHUB_TOKEN }}
     - name: Run checks
-      run: sbt check
+      run: nix develop --command sbt check
     - name: Upload coverage
       uses: codecov/codecov-action@v4
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
     - name: Publish Local
-      run: sbt '+publishLocal'
+      run: nix develop --command sbt '+publishLocal'

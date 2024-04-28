@@ -173,9 +173,9 @@ class IndentSpec extends munit.FunSuite {
 
     val c = i"""Test
     |  ${Seq(
-      "  1. Entry\nfoo".indented,
-      "  2. Entry\nbar".indented
-    ).indented}
+        "  1. Entry\nfoo".indented,
+        "  2. Entry\nbar".indented
+      ).indented}
     |Done"""
 
     val expectedC = """Test

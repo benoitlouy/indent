@@ -1,19 +1,18 @@
 import Dependencies._
 import ReleaseTransformations._
 
-lazy val scala211 = "2.11.12"
-lazy val scala212 = "2.12.10"
-lazy val scala213 = "2.13.2"
+lazy val scala212 = "2.12.19"
+lazy val scala213 = "2.13.13"
+lazy val scala3 = "3.3.3"
 
-lazy val supportedScalaVersions = List(scala213, scala212, scala211)
+lazy val supportedScalaVersions = List(scala3, scala213, scala212)
 
 ThisBuild / scalaVersion := scala213
 ThisBuild / organization := "com.github.benoitlouy"
 ThisBuild / organizationName := "benoitlouy"
 ThisBuild / semanticdbEnabled := true
-ThisBuild / semanticdbVersion := "4.3.24"
+ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 ThisBuild / scalafixDependencies += organizeImports
-ThisBuild / testFrameworks += new TestFramework("munit.Framework")
 
 lazy val root = (project in file("."))
   .settings(
@@ -30,7 +29,8 @@ lazy val docs = (project in file("indent-docs"))
       "ORGANIZATION" -> organization.value,
       "NAME" -> (root / name).value,
       "VERSION" -> version.value
-    )
+    ),
+    scalacOptions ~= { _.filterNot(_ == "-Xfatal-warnings") }
   )
   .dependsOn(root)
   .enablePlugins(MdocPlugin)
@@ -55,7 +55,7 @@ ThisBuild / licenses := List("Apache 2" -> new URL("http://www.apache.org/licens
 ThisBuild / homepage := Some(url("https://github.com/benoitlouy/indent"))
 
 // Remove all additional repository other than Maven Central from POM
-ThisBuild / pomIncludeRepository := { _ => false }
+// ThisBuild / pomIncludeRepository := { _ => false }
 ThisBuild / publishTo := {
   val nexus = "https://oss.sonatype.org/"
   if (isSnapshot.value) Some("snapshots".at(nexus + "content/repositories/snapshots"))
@@ -87,9 +87,9 @@ releaseProcess := Seq[ReleaseStep](
   pushChanges
 )
 
-addCommandAlias("fix", ";compile:scalafix ;test:scalafix")
+addCommandAlias("fix", ";Compile/scalafix ;Test/scalafix")
 addCommandAlias("cov", ";clean;coverage;+test;coverageReport")
 addCommandAlias("fmt", ";scalafmtAll;scalafmtSbt")
-addCommandAlias("fixCheck", ";compile:scalafix --check ;test:scalafix --check")
+addCommandAlias("fixCheck", ";Compile/scalafix --check ;Test/scalafix --check")
 addCommandAlias("fmtCheck", ";scalafmtCheckAll;scalafmtSbtCheck")
 addCommandAlias("check", ";cov;fixCheck;fmtCheck;docs/mdoc")

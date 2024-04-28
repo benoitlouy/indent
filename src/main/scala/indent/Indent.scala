@@ -79,7 +79,7 @@ private[indent] object Utils {
   def toIndented(indent: String, parts: Vector[Part]): Indented = {
     val splitParts = parts.flatMap {
       case i: Part.Indented => Vector(i)
-      case Part.String(s) => split(Vector.empty, s).map(Part.String)
+      case Part.String(s) => split(Vector.empty, s).map(Part.String.apply)
       case o: Part.Other => Vector(o)
     }
     val res = splitParts
@@ -144,7 +144,7 @@ class Indent(indent: String) { outer =>
         case Nil => Nil
       }
 
-      val stringParts = stripped.map(Part.String)
+      val stringParts = stripped.map(Part.String.apply)
       val indentParts = indents.map {
         case i: Indented => Part.Indented(i)
         case o => Part.Other(o)
@@ -152,8 +152,8 @@ class Indent(indent: String) { outer =>
 
       val parts = stringParts
         .zip(indentParts)
-        .flatMap {
-          case (s, i) => Vector(s, i)
+        .flatMap { case (s, i) =>
+          Vector(s, i)
         }
         .toVector :+ Part.String(stripped.last)
 

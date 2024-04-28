@@ -15,7 +15,7 @@
           inherit system;
           overlays = [ typelevel-nix.overlay ];
         };
-        jdk = pkgs.jdk8;
+        jdk = pkgs.jdk11;
       in
       {
         devShell = pkgs.devshell.mkShell {
