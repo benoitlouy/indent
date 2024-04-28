@@ -152,8 +152,8 @@ class Indent(indent: String) { outer =>
 
       val parts = stringParts
         .zip(indentParts)
-        .flatMap {
-          case (s, i) => Vector(s, i)
+        .flatMap { case (s, i) =>
+          Vector(s, i)
         }
         .toVector :+ Part.String(stripped.last)
 
