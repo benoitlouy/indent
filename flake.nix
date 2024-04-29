@@ -1,32 +1,28 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    typelevel-nix = {
-      url = "github:typelevel/typelevel-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    flake-utils.follows = "typelevel-nix/flake-utils";
+    devshell.url = "github:numtide/devshell";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils, typelevel-nix }:
+  outputs = { self, nixpkgs, flake-utils, devshell }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
           inherit system;
-          overlays = [ typelevel-nix.overlay ];
+          overlays = [ devshell.overlays.default ];
         };
         jdk = pkgs.jdk11;
+        sbt = pkgs.sbt.override { jre = jdk; };
       in
       {
         devShell = pkgs.devshell.mkShell {
-          imports = [ typelevel-nix.typelevelShell ];
           name = "scala shell for indent project";
-          typelevelShell = {
-            jdk.package = jdk;
-            sbtMicrosites = {
-              enable = false;
-            };
-          };
+          packages = [
+            jdk
+            sbt
+            pkgs.scala-cli
+          ];
         };
       }
     );
