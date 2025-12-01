@@ -1,9 +1,9 @@
 import Dependencies._
 import ReleaseTransformations._
 
-lazy val scala212 = "2.12.19"
-lazy val scala213 = "2.13.13"
-lazy val scala3 = "3.3.3"
+lazy val scala212 = "2.12.20"
+lazy val scala213 = "2.13.18"
+lazy val scala3 = "3.3.7"
 
 lazy val supportedScalaVersions = List(scala3, scala213, scala212)
 
