@@ -10,7 +10,7 @@ class IndentSpec extends munit.FunSuite {
     |    a. Subsection
     |  2. Section"""
 
-    assert(data.toString == data.indentWith("•"))
+    assertEquals(data.indentWith("•"), data.toString())
   }
 
   test("interpolation of variable of type other than Indent") {
@@ -28,7 +28,7 @@ class IndentSpec extends munit.FunSuite {
     |    a. Subsection
     |  2. Section""".stripMargin
 
-    assert(data.indent == expected)
+    assertEquals(data.indent, expected)
   }
 
   test("composition") {
@@ -49,7 +49,7 @@ class IndentSpec extends munit.FunSuite {
     |
     |""".stripMargin
 
-    assert(data.indent == expected)
+    assertEquals(data.indent, expected)
   }
 
   test("nested") {
@@ -85,7 +85,7 @@ class IndentSpec extends munit.FunSuite {
     |  }
     |}""".stripMargin
 
-    assert(outer.indentWith("  ") == expected)
+    assertEquals(outer.indentWith("  "), expected)
   }
 
   test("recursive") {
@@ -111,7 +111,8 @@ class IndentSpec extends munit.FunSuite {
       |    }
       |  }
       |}""".stripMargin
-    assert(result.indent == expected)
+
+    assertEquals(result.indent, expected)
   }
 
   test("String.indented creates Indented instance from string") {
@@ -129,14 +130,14 @@ class IndentSpec extends munit.FunSuite {
     |  Bar
     |      test2""".stripMargin
 
-    assert(result.indent == expected)
+    assertEquals(result.indent, expected)
   }
 
   test("custom indentation") {
     val spaces3 = Indent.using("   ")
     import spaces3._
 
-    assert("   test".indented.indentWith("") == "test")
+    assertEquals("   test".indented.indentWith(""), "test")
   }
 
   test("Seq.indented") {
@@ -156,7 +157,7 @@ class IndentSpec extends munit.FunSuite {
     |        4. Entry
     |  Done""".stripMargin
 
-    assert(a.indent == expectedA)
+    assertEquals(a.indent, expectedA)
 
     val b = i"""Test
     |${(1 to 4).map(genReversed(_, 4)).indented}
@@ -169,7 +170,7 @@ class IndentSpec extends munit.FunSuite {
     |4. Entry
     |  Done""".stripMargin
 
-    assert(b.indent == expectedB)
+    assertEquals(b.indent, expectedB)
 
     val c = i"""Test
     |  ${Seq(
@@ -185,7 +186,7 @@ class IndentSpec extends munit.FunSuite {
     |  bar
     |Done""".stripMargin
 
-    assert(c.indent == expectedC)
+    assertEquals(c.indent, expectedC)
 
     val d = i"""Vector(
     |  ${Vector(i"a", i"b").indentedWith(before = ",")}
@@ -196,7 +197,7 @@ class IndentSpec extends munit.FunSuite {
       |  b
       |)""".stripMargin
 
-    assert(d.indent == expectedD)
+    assertEquals(d.indent, expectedD)
 
     val e = i"""Test ${Vector(i"  1", i"  2").indentedWith(after = "with ")}
     |Done"""
@@ -205,7 +206,7 @@ class IndentSpec extends munit.FunSuite {
     |  with 2
     |Done""".stripMargin
 
-    assert(e.indent == expectedE)
+    assertEquals(e.indent, expectedE)
   }
 
   test("empty Seq.indented") {
@@ -222,7 +223,7 @@ class IndentSpec extends munit.FunSuite {
       |  b
       |}""".stripMargin
 
-    assert(a.indent == expected)
+    assertEquals(a.indent, expected)
   }
 
   test("isEmpty nonEmpty") {
@@ -244,6 +245,6 @@ class IndentSpec extends munit.FunSuite {
 
     val res = Vector(i"a", i"b", i"c").indentedWith(before = ",", newlines = 2)
 
-    assert(res.indent == expected)
+    assertEquals(res.indent, expected)
   }
 }
