@@ -1,3 +1,5 @@
+⚠️ This repository is archived. The source for this library is now hosted at https://forgejo.louy.social/benoitlouy/indent
+
 # indent
 
 [![maven](https://maven-badges.herokuapp.com/maven-central/com.github.benoitlouy/indent_2.13/badge.svg)](https://search.maven.org/artifact/com.github.benoitlouy/indent_2.13)
